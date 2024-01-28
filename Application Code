@@ -1,0 +1,57 @@
+// Import necessary modules
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
+import { Roles } from 'meteor/alanning:roles';
+import { Loans } from './loans.js';
+import { Payments } from './payments.js';
+
+// Define user roles
+const roles = ['admin', 'borrower', 'lender'];
+
+// Create a new user
+Accounts.createUser({
+  email: 'user@example.com',
+  password: 'password',
+  profile: {
+    role: 'borrower'
+  }
+});
+
+// Assign a role to a user
+Roles.addUsersToRoles('userId', 'role');
+
+// Create a new loan request
+Loans.insert({
+  amount: 1000,
+  interestRate: 10,
+  term: 12,
+  borrowerId: 'borrowerId'
+});
+
+// Create a new payment
+Payments.insert({
+  amount: 100,
+  date: new Date(),
+  loanId: 'loanId',
+  lenderId: 'lenderId'
+});
+
+// Update the status of a loan
+Loans.update('loanId', {
+  $set: {
+    status: 'paid'
+  }
+});
+
+// Get all loans for a user
+const loans = Loans.find({
+  borrowerId: 'borrowerId'
+});
+
+// Get all payments for a user
+const payments = Payments.find({
+  lenderId: 'lenderId'
+});
+
+// Get all transactions for an admin user
+const transactions = Loans.find();
